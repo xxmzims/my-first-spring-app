@@ -10,4 +10,8 @@
 <bean id="musicBean"
           class="ru.ugrinovitch.springApp.MetalMusic">
     </bean>
+    <bean id="musicPlayer"
+          class="ru.ugrinovitch.springApp.MusicPlayer">
+        <constructor-arg ref="musicBean"/>
+    </bean>
 </beans>

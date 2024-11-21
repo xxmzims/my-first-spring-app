@@ -6,8 +6,12 @@ public class SpringTest {
     public static void main(String[] args) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
                     "applicationContext.xml");
+
+        ClassicalMusic music = context.getBean("musicBean", ClassicalMusic.class);
+        System.out.println(music.getSong());
+
         // получаем объект из bean-файла
-        MusicPlayer player = context.getBean("musicPlayer", MusicPlayer.class);
+   /*     MusicPlayer player = context.getBean("musicPlayer", MusicPlayer.class);
         MusicPlayer player2 = context.getBean("musicPlayer", MusicPlayer.class);
 
         boolean comparison = player == player2;
@@ -17,7 +21,7 @@ public class SpringTest {
         player.playMusic();
 
 //        System.out.println(player.getName());
-//        System.out.println(player.getVolume());
+//        System.out.println(player.getVolume());*/
 
         context.close();
     }

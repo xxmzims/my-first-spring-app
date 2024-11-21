@@ -8,7 +8,9 @@
 
     <context:property-placeholder location="classpath:musicPlayer.properties"/>
     <bean id="musicBean"
-          class="ru.ugrinovitch.springApp.MetalMusic">
+          class="ru.ugrinovitch.springApp.ClassicalMusic"
+    init-method="doMyDestroy" destroy-method="doMyDestroy"
+    factory-method="getClassicalMusic">
     </bean>
     <bean id="musicPlayer"
           class="ru.ugrinovitch.springApp.MusicPlayer"

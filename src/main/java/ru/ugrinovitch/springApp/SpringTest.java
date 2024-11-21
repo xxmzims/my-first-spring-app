@@ -7,12 +7,13 @@ public class SpringTest {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
                     "applicationContext.xml");
         // получаем объект из bean-файла
-        Music music = context.getBean("musicBean", Music.class);
-
-        // Внедреннее зависимости
-        MusicPlayer musicPlayer = new MusicPlayer(music);
-
+        Music rockMusic = context.getBean("rockMusic", Music.class);
+        Music ClassicalMusic = context.getBean("classicalMusic", Music.class);
+        // Внедрение зависимости
+        MusicPlayer musicPlayer = new MusicPlayer(rockMusic);
+        MusicPlayer musicPlayer2 = new MusicPlayer(ClassicalMusic);
         musicPlayer.playMusic();
+        musicPlayer2.playMusic(); 
         context.close();
     }
 }

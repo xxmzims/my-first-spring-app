@@ -1,4 +1,3 @@
-
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -12,9 +11,9 @@
           class="ru.ugrinovitch.springApp.MetalMusic">
     </bean>
     <bean id="musicPlayer"
-          class="ru.ugrinovitch.springApp.MusicPlayer">
+          class="ru.ugrinovitch.springApp.MusicPlayer"
+    scope="prototype">
         <property name="music" ref="musicBean"/>
-
 
         <property name="name" value="${musicPlayer.name}"/>
         <property name="volume" value="${musicPlayer.volume}"/>

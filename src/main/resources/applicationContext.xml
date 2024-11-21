@@ -1,4 +1,3 @@
-
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -8,14 +7,27 @@
     http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:property-placeholder location="classpath:musicPlayer.properties"/>
-    <bean id="musicBean"
+    <bean id="metalMusic"
           class="ru.ugrinovitch.springApp.MetalMusic">
     </bean>
+
+    <bean id="classicalMusic"
+          class="ru.ugrinovitch.springApp.ClassicalMusic">
+    </bean>
+
+    <bean id="rockMusic"
+          class="ru.ugrinovitch.springApp.RockMusic">
+    </bean>
+
     <bean id="musicPlayer"
           class="ru.ugrinovitch.springApp.MusicPlayer">
-        <property name="music" ref="musicBean"/>
-
-
+        <property name="musicList">
+            <list>
+                <ref bean="metalMusic"/>
+                <ref bean="classicalMusic"/>
+                <ref bean="rockMusic"/>
+            </list>
+        </property>
         <property name="name" value="${musicPlayer.name}"/>
         <property name="volume" value="${musicPlayer.volume}"/>
     </bean>

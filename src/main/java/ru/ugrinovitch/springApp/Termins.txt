@@ -2,3 +2,17 @@
 @Component - создает бин
 
 @Autowired - Автоматически внедряет зависимость. Spring сам ищет подходящий bin и автоматически внедряет его
+
+@Qualifier(id_bean) - Уточняет какой бин будет использоваться в @Autowired
+
+Когда внедрение производиться с помощью конструктора,
+для уточнения зависимостей необходимо использовать такой синтаксис:
+
+        @Autowired
+        public MusicPlayer(@Qualifier("rockMusic") Music music1,
+                           @Qualifier("classicalMusic") Music music2){
+             this.music1 = music1;
+             this.music2 = music2;
+        }
+
+Аннотацию @Qualifier необходимо использовать рядом с аргументами конструктора

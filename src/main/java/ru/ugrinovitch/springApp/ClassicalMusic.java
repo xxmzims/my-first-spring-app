@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-@Component
-@Scope("prototype")
+
+
 public class ClassicalMusic implements Music {
-    @PostConstruct
+
     public void doMyInit(){
         System.out.println("ClassicalMusic doMyInit");
     }
@@ -17,7 +17,6 @@ public class ClassicalMusic implements Music {
     public String getSong() {
         return "Hungarian Rhapsody";
     }
-    @PreDestroy
     public void doMyDestroy(){
         System.out.println("ClassicalMusic doMyDestroy");
     }

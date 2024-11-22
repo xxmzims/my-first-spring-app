@@ -8,10 +8,7 @@ public class SpringTest {
                     "applicationContext.xml");
         // получаем объект из bean-файла
         MusicPlayer player = context.getBean("musicPlayer", MusicPlayer.class);
-        player.playMusic();
-
-        System.out.println(player.getName());
-        System.out.println(player.getVolume());
+        player.playMusic(Style.ROCK);
 
         context.close();
     }

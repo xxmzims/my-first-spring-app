@@ -5,30 +5,5 @@
     http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context.xsd">
-
-    <context:property-placeholder location="classpath:musicPlayer.properties"/>
-    <bean id="metalMusic"
-          class="ru.ugrinovitch.springApp.MetalMusic">
-    </bean>
-
-    <bean id="classicalMusic"
-          class="ru.ugrinovitch.springApp.ClassicalMusic">
-    </bean>
-
-    <bean id="rockMusic"
-          class="ru.ugrinovitch.springApp.RockMusic">
-    </bean>
-
-    <bean id="musicPlayer"
-          class="ru.ugrinovitch.springApp.MusicPlayer">
-        <property name="musicList">
-            <list>
-                <ref bean="metalMusic"/>
-                <ref bean="classicalMusic"/>
-                <ref bean="rockMusic"/>
-            </list>
-        </property>
-        <property name="name" value="${musicPlayer.name}"/>
-        <property name="volume" value="${musicPlayer.volume}"/>
-    </bean>
+    <context:component-scan base-package="ru.ugrinovitch.springApp"/>
 </beans>

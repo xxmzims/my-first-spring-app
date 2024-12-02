@@ -1,4 +1,5 @@
 target/
+/src/main/resources/database.properties
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -33,6 +34,6 @@ build/
 
 ### VS Code ###
 .vscode/
-
 ### Mac OS ###
 .DS_Store
+

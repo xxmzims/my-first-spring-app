@@ -24,7 +24,7 @@ import java.util.Objects;
 @EnableWebMvc
 // подгружаем свойства из файла
 @PropertySource("classpath:database.properties")
-public class SpringConfig implements WebMvcConfigurer {
+public class  SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
 

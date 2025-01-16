@@ -7,8 +7,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,23 +21,26 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
-import java.util.Objects;
+import java.util.Properties;
 
 @Configuration
 @ComponentScan("ru.ugrinovich.SpringMVCApp")
+@PropertySource("classpath:hibernate.properties")
+@EnableTransactionManagement
 @EnableWebMvc
+@EnableJpaRepositories("ru.ugrinovich.SpringMVCApp.repositories")
 // подгружаем свойства из файла
-@PropertySource("classpath:database.properties")
-public class  SpringConfig implements WebMvcConfigurer {
+public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
 
-    private final Environment environment;
+    private final Environment env;
+
     @Autowired
-    public SpringConfig(ApplicationContext applicationContext, Environment environment) {
+    public SpringConfig(ApplicationContext applicationContext, Environment env) {
         this.applicationContext = applicationContext;
         // окружение
-        this.environment = environment;
+        this.env = env;
     }
 
     @Bean
@@ -64,18 +71,45 @@ public class  SpringConfig implements WebMvcConfigurer {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         // Указываем драйвер
-        dataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("driver")));
+        dataSource.setDriverClassName(env.getRequiredProperty("hibernate.driver_class"));
         // url подключения к бд
-        dataSource.setUrl(environment.getProperty("url"));
+        dataSource.setUrl(env.getProperty("hibernate.connection.url"));
 
-        dataSource.setUsername(environment.getProperty("usernameForDB"));
-        dataSource.setPassword(environment.getProperty("passwordForDB"));
+        dataSource.setUsername(env.getProperty("hibernate.connection.username"));
+        dataSource.setPassword(env.getProperty("hibernate.connection.password"));
 
         return dataSource;
     }
-    // создаем бин нашего JdbcTemplate
+
+    // Используем Hibernate вместо JdbcTemplate
+//    @Bean
+//    public JdbcTemplate jdbcTemplate() {
+//        return new JdbcTemplate(dataSource());
+//    }
+
+    private Properties hibernateProperties() {
+        Properties properties = new Properties();
+        properties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
+        properties.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
+
+        return properties;
+    }
+
     @Bean
-    public JdbcTemplate JdbcTemplate(){
-        return new JdbcTemplate(dataSource());
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setPackagesToScan("ru.ugrinovich.SpringMVCApp");
+        sessionFactory.setHibernateProperties(hibernateProperties());
+
+        return sessionFactory;
+    }
+
+    @Bean
+    public PlatformTransactionManager hibernateTransactionManager() {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory().getObject());
+
+        return transactionManager;
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.ugrinovich.SpringMVCApp.DAO.PersonDAO;
+import ru.ugrinovich.SpringMVCApp.DAO.PersonDAOWithHibernate;
 import ru.ugrinovich.SpringMVCApp.Util.PersonValidator;
 import ru.ugrinovich.SpringMVCApp.models.Person;
 
@@ -14,26 +14,27 @@ import ru.ugrinovich.SpringMVCApp.models.Person;
 @RequestMapping("/people")
 public class PeopleController {
 
-    private PersonDAO personDAO;
+    private PersonDAOWithHibernate personDAOWithHibernate;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
-        this.personDAO = personDAO;
+    public PeopleController(PersonDAOWithHibernate personDAOWithHibernate, PersonValidator personValidator) {
+
+        this.personDAOWithHibernate = personDAOWithHibernate;
         this.personValidator = personValidator;
     }
 
     @GetMapping()
     public String index(Model model) {
         // Получаем всех людей из DAO и передадим на отображение в представление
-        model.addAttribute("people", personDAO.index());
+        model.addAttribute("people", personDAOWithHibernate.index());
         return "people/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         // Получим одного человека по id из DAO b передадим на отображение в представление
-        model.addAttribute("person", personDAO.show(id));
+        model.addAttribute("person", personDAOWithHibernate.show(id));
         return "people/show";
     }
 
@@ -49,14 +50,14 @@ public class PeopleController {
         if(bindingResult.hasErrors()){
             return "people/new";
         }
-        personDAO.save(person);
+        personDAOWithHibernate.save(person);
         // переход на другую страницу
         return "redirect:/people";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("person", personDAO.show(id));
+        model.addAttribute("person", personDAOWithHibernate.show(id));
         return "people/edit";
     }
 
@@ -66,13 +67,13 @@ public class PeopleController {
         if (bindingResult.hasErrors()){
             return "people/edit";
         }
-        personDAO.update(id, person);
+        personDAOWithHibernate.update(id, person);
         return "redirect:/people";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
-        personDAO.delete(id);
+        personDAOWithHibernate.delete(id);
         return "redirect:/people";
     }
 }

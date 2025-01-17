@@ -4,16 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.ugrinovich.SpringMVCApp.DAO.PersonDAOWithHibernate;
+import ru.ugrinovich.SpringMVCApp.services.PeopleService;
 import ru.ugrinovich.SpringMVCApp.models.Person;
 
 @Component
 public class PersonValidator implements Validator {
-    private final PersonDAOWithHibernate personDAOWithHibernate;
+    private final PeopleService peopleService;
 
     @Autowired
-    public PersonValidator(PersonDAOWithHibernate personDAOWithHibernate) {
-        this.personDAOWithHibernate = personDAOWithHibernate;
+    public PersonValidator(PeopleService peopleService) {
+        this.peopleService = peopleService;
     }
 
     @Override
